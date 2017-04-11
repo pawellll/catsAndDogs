@@ -5,6 +5,7 @@ import os
 import sys
 import atexit
 import time
+import logging
 
 from DataProvider import DataProvider
 from Configuration import Configuration as Config
@@ -14,12 +15,8 @@ img_size = 64
 inputN = img_size * img_size
 classesN = 2
 
-
-def quit_gracefully(result_file):
-	print "quit gracefully"
-	result_file.write("Script finished:" + Utils.get_time())
-	result_file.close()
-
+def logger():
+	return logging.getLogger(Config.LOGGER_NAME)
 
 def conv2d(x, w, b, strides=1):
 	x = tf.nn.conv2d(x, w, strides=[1, strides, strides, 1], padding='SAME')
@@ -91,20 +88,12 @@ def get_weights_and_biases():
 	return weights, biases
 
 
-def register_quit(result_file):
-	atexit.register(quit_gracefully, result_file)
-
-
-def open_result_file():
-	return open(Config.RESULT_FILE_PATH, "w")
-
-
 def read_command_line():
 	return int(sys.argv[1]), int(sys.argv[2]), int(sys.argv[3])
 
 
 def create_submission(session, model, keep_prob, x, data_provider):
-	print "creating submission"
+	logger().info("Creating submission")
 
 	submission_file = open("submission.csv", "w")
 
@@ -119,16 +108,16 @@ def create_submission(session, model, keep_prob, x, data_provider):
 		save_labels(submission_file, labels, file_paths)
 
 		progress = progress + len(batch_x)
-		print "analysed " + str(progress) + " images"
+		logger().info("analysed " + str(progress) + " images")
 
 		batch_x, file_paths = data_provider.submission_data_batch(batch_size)
 
 	submission_file.close()
-	print "Submission created"
+	logger().info("Submission created")
 
 
 def evaluate(sess, x, y, accuracy, keep_prob, data_provider):
-	print "evaluating"
+	logger().info("evaluating")
 
 	ckpt = tf.train.get_checkpoint_state(Config.CHECKPOINT_PATH)
 
@@ -136,7 +125,7 @@ def evaluate(sess, x, y, accuracy, keep_prob, data_provider):
 		saver = tf.train.Saver(tf.global_variables())
 		saver.restore(sess, ckpt.model_checkpoint_path)
 	else:
-		print "no model to be restored"
+		logger().error("no model to be restored")
 		return 0.0
 
 	sumAcc = 0.0
@@ -148,7 +137,7 @@ def evaluate(sess, x, y, accuracy, keep_prob, data_provider):
 
 		acc = sess.run(accuracy, feed_dict={x: batch_x, y: batch_y, keep_prob: 1.})
 
-		print "testing accuracy:", acc
+		logger().info("testing accuracy:", acc)
 
 		sumAcc += acc * len(batch_x);
 		testSize += len(batch_x);
@@ -157,16 +146,11 @@ def evaluate(sess, x, y, accuracy, keep_prob, data_provider):
 
 
 def train(sess, x, y, optimizer, cost, accuracy, keep_prob, data_provider):
-	print "training"
+	logger().info("Start training")
 
 	saver = tf.train.Saver(tf.global_variables())
 
-	result_file = open_result_file()
-	register_quit(result_file)
-
-	result_file.write("Start training:" + Utils.get_time())
-
-	start = time.time()
+	training_start = time.time()
 
 	step = 1
 
@@ -182,18 +166,17 @@ def train(sess, x, y, optimizer, cost, accuracy, keep_prob, data_provider):
 				  "{:.6f}".format(loss) + ", Training Accuracy= " + \
 				  "{:.5f}".format(acc)
 
-			print msg
-			result_file.write(msg + "\n")
+			logger().info(msg)
 
 		if step % 20 == 0:
-			print "saving model"
+			logger().info("Saving model")
 			saver.save(sess, os.path.join(Config.CHECKPOINT_PATH, 'model.ckpt'))
 
 		step += 1
 
-	end = time.time()
+	training_end = time.time()
 
-	print "Training Finished! " + str(end - start) + "ms elapsed\n"
+	logger().info("Training finished. Time of training:" + str(training_end - training_start) + " s")
 
 	saver.save(sess, os.path.join(Config.CHECKPOINT_PATH, 'model.ckpt'))		
 
@@ -215,6 +198,9 @@ def check_arguments_and_maybe_exit():
 			sys.exit()
 
 def main():
+
+	Config.configure_logger()
+
 	check_arguments_and_maybe_exit()
 
 	train_flag, eval_flag, submission_flag = read_command_line()
@@ -248,7 +234,7 @@ def main():
 
 		if eval_flag:
 			acc = evaluate(sess, x, y, accuracy, keep_prob, data_provider)
-			print "Overall testing Accuracy:", acc
+			logger().info("Overall testing Accuracy:", acc)
 
 		if submission_flag:
 			create_submission(sess, model, keep_prob, x, data_provider)
