@@ -1,0 +1,8 @@
+1. timing training neural network
+2. Stop overriting results
+3. Train with 200 000 iterations with raw images + preprocessed
+	Preprocessing:
+	blur
+	normalisation?
+	
+4. Do data augmentation and train with 200 000 iterations
