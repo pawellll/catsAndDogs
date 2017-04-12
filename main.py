@@ -200,6 +200,7 @@ def check_arguments_and_maybe_exit():
 def main():
 
 	Config.configure_logger()
+	Config.save_config()
 
 	check_arguments_and_maybe_exit()
 

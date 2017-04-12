@@ -2,8 +2,7 @@ import logging
 
 class Configuration:
     learning_rate = 0.0005
-    # training_iters = 200000
-    training_iters = 129
+    training_iters = 200000
     batch_size = 128
     display_step = 1
     dropout = 0.5
@@ -12,7 +11,7 @@ class Configuration:
     CHECKPOINT_PATH = './results1/'
     TRAIN_FOLDER = './preprocessed'
     SUBMISSION_FOLDER = './test64'
-    RESULT_FILE_PATH = './results1/results.dat'
+    RESULT_FILE_PATH = CHECKPOINT_PATH + 'results.dat'
 
     LOGGER_NAME = 'main_logger'
 
@@ -26,7 +25,7 @@ class Configuration:
 
         sh = logging.StreamHandler()
         fh = logging.FileHandler(Configuration.RESULT_FILE_PATH)
-        
+
         sh.setLevel(logging.DEBUG)
         fh.setLevel(logging.DEBUG)
 
@@ -40,3 +39,11 @@ class Configuration:
         logger.addHandler(fh)
 
         logger.info("Logger configured")
+
+    @staticmethod
+    def save_config():
+        logger = logging.getLogger(Configuration.LOGGER_NAME)
+        logger.info("Saving configuration")
+
+        with open(Configuration.CHECKPOINT_PATH + "config.txt", 'w') as f:
+            f.write(str(Configuration.__dict__)) 
