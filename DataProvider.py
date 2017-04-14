@@ -6,9 +6,10 @@ from Configuration import Configuration as Config
 
 
 class DataProvider:
-    def __init__(self, train_folder, submission_folder):
+    def __init__(self, train_folder, submission_folder, verification_folder):
         self._train_folder = train_folder
         self._submission_folder = submission_folder
+        self._verification_folder = verification_folder
 
         self._submission_file_paths = list()
 
@@ -21,8 +22,8 @@ class DataProvider:
         self.load_train_data_info()
         self.load_submission_data_info()
 
-    def extract_image_file_names_with_labels(self):
-        files = Utils.files_in_path(self._train_folder)
+    def extract_image_file_names_with_labels(self, folder):
+        files = Utils.files_in_path(folder)
 
         image_files = []
         image_labels = []
@@ -37,7 +38,7 @@ class DataProvider:
             elif label_name == "dog":
                 label[1] = 1
 
-            image_files.append(self._train_folder + "/" + imageFilePath)
+            image_files.append(folder + "/" + imageFilePath)
             image_labels.append(label)
 
         return image_files, image_labels
@@ -77,16 +78,8 @@ class DataProvider:
         return numpy.array(images), numpy.array(train_labels)
 
     def load_train_data_info(self):
-        image_files, labels = self.extract_image_file_names_with_labels()
-
-        data_set_size = len(image_files)
-        train_number = data_set_size - Config.test_number
-
-        self._train_image_files = image_files[0:train_number]
-        self._train_labels = labels[0:train_number]
-
-        self._test_image_files = image_files[train_number + 1: data_set_size - 1]
-        self._test_labels = labels[train_number + 1: data_set_size - 1]
+        self._train_image_files, self._train_labels = self.extract_image_file_names_with_labels(self._train_folder)
+        self._test_image_files, self._test_labels = self.extract_image_file_names_with_labels(self._verification_folder)
 
     def load_submission_data_info(self):
         for i in range(1, 125001):

@@ -226,7 +226,7 @@ def main():
 
 	init = tf.global_variables_initializer()
 
-	data_provider = DataProvider(Config.TRAIN_FOLDER, Config.SUBMISSION_FOLDER)
+	data_provider = DataProvider(Config.TRAIN_FOLDER, Config.SUBMISSION_FOLDER, Config.VERIFICATION_FOLDER)
 
 	with tf.Session() as sess:
 		sess.run(init)

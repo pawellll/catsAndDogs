@@ -1,3 +1,4 @@
+from Utils import Utils
 import logging
 
 class Configuration:
@@ -6,11 +7,11 @@ class Configuration:
     batch_size = 128
     display_step = 1
     dropout = 0.5
-    test_number = 5000  # number of test images (out of 250000)
 
-    CHECKPOINT_PATH = './results1/'
+    CHECKPOINT_PATH = './results2/'
     TRAIN_FOLDER = './preprocessed'
     SUBMISSION_FOLDER = './test64'
+    VERIFICATION_FOLDER = './verification64'
     RESULT_FILE_PATH = CHECKPOINT_PATH + 'results.dat'
 
     LOGGER_NAME = 'main_logger'
@@ -19,7 +20,14 @@ class Configuration:
         pass
 
     @staticmethod
+    def maybe_create_result_folder():
+        Utils.maybe_create_directory(Configuration.CHECKPOINT_PATH)
+
+    @staticmethod
     def configure_logger():
+
+        Configuration.maybe_create_result_folder()
+
         logger = logging.getLogger(Configuration.LOGGER_NAME)
         logger.setLevel(logging.DEBUG)
 

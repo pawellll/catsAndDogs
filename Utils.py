@@ -15,7 +15,4 @@ class Utils:
 	def maybe_create_directory(directory):
 		if not os.path.exists(directory):
 			os.makedirs(directory)
-
-	@staticmethod
-	def get_time():
-		return strftime("%Y-%m-%d %H:%M:%S", gmtime())
+			
