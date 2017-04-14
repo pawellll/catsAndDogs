@@ -137,12 +137,14 @@ def evaluate(sess, x, y, accuracy, keep_prob, data_provider):
 
 		acc = sess.run(accuracy, feed_dict={x: batch_x, y: batch_y, keep_prob: 1.})
 
-		logger().info("testing accuracy:", acc)
+		logger().info("testing accuracy:" + str(acc) + " batchSize:" + str(len(batch_x)))
 
 		sumAcc += acc * len(batch_x);
 		testSize += len(batch_x);
 
 		batch_x, batch_y = data_provider.test_data_batch()
+
+	return sumAcc/testSize
 
 
 def train(sess, x, y, optimizer, cost, accuracy, keep_prob, data_provider):
@@ -235,7 +237,7 @@ def main():
 
 		if eval_flag:
 			acc = evaluate(sess, x, y, accuracy, keep_prob, data_provider)
-			logger().info("Overall testing Accuracy:", acc)
+			logger().info("Overall testing Accuracy:" + str(acc))
 
 		if submission_flag:
 			create_submission(sess, model, keep_prob, x, data_provider)
