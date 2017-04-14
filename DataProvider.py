@@ -7,6 +7,10 @@ from Configuration import Configuration as Config
 
 class DataProvider:
     def __init__(self, train_folder, submission_folder, verification_folder):
+
+        self.verification_images_count = 0
+        self.train_images_count = 0
+
         self._train_folder = train_folder
         self._submission_folder = submission_folder
         self._verification_folder = verification_folder
@@ -80,6 +84,9 @@ class DataProvider:
     def load_train_data_info(self):
         self._train_image_files, self._train_labels = self.extract_image_file_names_with_labels(self._train_folder)
         self._test_image_files, self._test_labels = self.extract_image_file_names_with_labels(self._verification_folder)
+
+        self.verification_images_count = len(self._test_image_files)
+        self.train_images_count = len(self._train_image_files)
 
     def load_submission_data_info(self):
         for i in range(1, 125001):

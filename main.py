@@ -156,7 +156,11 @@ def train(sess, x, y, optimizer, cost, accuracy, keep_prob, data_provider):
 
 	step = 1
 
-	while step * Config.batch_size < Config.training_iters:
+	training_iters = Config.epochs * data_provider.train_images_count
+
+	logger().info(str(training_iters) + " needed to achieve " + Config.epochs + " epochs")
+
+	while step * Config.batch_size < training_iters:
 
 		batch_x, batch_y = data_provider.next_data_batch()
 

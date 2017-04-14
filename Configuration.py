@@ -3,7 +3,7 @@ import logging
 
 class Configuration:
     learning_rate = 0.0005
-    training_iters = 200000
+    epochs = 10
     batch_size = 128
     display_step = 1
     dropout = 0.5
