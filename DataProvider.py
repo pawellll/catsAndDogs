@@ -81,6 +81,11 @@ class DataProvider:
 
         return numpy.array(images), numpy.array(train_labels)
 
+
+    def load_verification_data_info(self):
+        self._test_image_files, self._test_labels = self.extract_image_file_names_with_labels(self._verification_folder)
+        self.verification_images_count = len(self._test_image_files)
+                
     def load_train_data_info(self):
         self._train_image_files, self._train_labels = self.extract_image_file_names_with_labels(self._train_folder)
         self._test_image_files, self._test_labels = self.extract_image_file_names_with_labels(self._verification_folder)

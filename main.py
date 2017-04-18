@@ -119,6 +119,8 @@ def create_submission(session, model, keep_prob, x, data_provider):
 def evaluate(sess, x, y, accuracy, keep_prob, data_provider):
 	logger().info("evaluating")
 
+	data_provider.load_verification_data_info()
+
 	ckpt = tf.train.get_checkpoint_state(Config.CHECKPOINT_PATH)
 
 	if ckpt and ckpt.model_checkpoint_path:
@@ -137,7 +139,7 @@ def evaluate(sess, x, y, accuracy, keep_prob, data_provider):
 
 		acc = sess.run(accuracy, feed_dict={x: batch_x, y: batch_y, keep_prob: 1.})
 
-		logger().info("testing accuracy:" + str(acc) + " batchSize:" + str(len(batch_x)))
+		# logger().info("testing accuracy:" + str(acc) + " batchSize:" + str(len(batch_x)))
 
 		sumAcc += acc * len(batch_x);
 		testSize += len(batch_x);
@@ -158,7 +160,7 @@ def train(sess, x, y, optimizer, cost, accuracy, keep_prob, data_provider):
 
 	training_iters = Config.epochs * data_provider.train_images_count
 
-	logger().info(str(training_iters) + " needed to achieve " + Config.epochs + " epochs")
+	logger().info(str(training_iters) + " needed to achieve " + str(Config.epochs) + " epochs")
 
 	while step * Config.batch_size < training_iters:
 
@@ -177,6 +179,12 @@ def train(sess, x, y, optimizer, cost, accuracy, keep_prob, data_provider):
 		if step % 20 == 0:
 			logger().info("Saving model")
 			saver.save(sess, os.path.join(Config.CHECKPOINT_PATH, 'model.ckpt'))
+
+			## to be removed
+			acc = evaluate(sess, x, y, accuracy, keep_prob, data_provider)
+			logger().info("Iteration:" +str(step * Config.batch_size) + " Overall testing Accuracy:" + str(acc))
+			## to be removed
+
 
 		step += 1
 

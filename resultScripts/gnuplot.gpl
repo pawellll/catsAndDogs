@@ -1,0 +1,32 @@
+#!/usr/bin/env gnuplot
+
+set terminal eps color  enhanced
+set termoption enhanced
+save_encoding = GPVAL_ENCODING
+set encoding iso_8859_2
+set macro
+
+
+set out "loss.eps"
+set title "Minibatch loss(iterations)"
+set ylabel "Minibatch loss"
+set xlabel "Iterations"
+set grid ytics lt 0 lw 1 lc rgb "#bbbbbb"
+set grid xtics lt 0 lw 1 lc rgb "#bbbbbb"
+plot "loss.dat" w lines title "Loss"
+
+set out "trainAcc.eps"
+set title "Training accuracy(iterations)"
+set ylabel "Training accuracy"
+set xlabel "Iterations"
+set grid ytics lt 0 lw 1 lc rgb "#bbbbbb"
+set grid xtics lt 0 lw 1 lc rgb "#bbbbbb"
+plot "trainingAccuracy.dat" w lines title "Accuracy"
+
+set out "testingAcc.eps"
+set title "Testing accuraccy(iterations)"
+set ylabel "Testing accuraccy"
+set xlabel "Iterations"
+set grid ytics lt 0 lw 1 lc rgb "#bbbbbb"
+set grid xtics lt 0 lw 1 lc rgb "#bbbbbb"
+plot "overall.dat" w lines title "Accuracy"

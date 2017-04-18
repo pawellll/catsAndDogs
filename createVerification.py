@@ -20,7 +20,7 @@ for imageFilePath in files:
 
 i = 0
 
-num_to_select = 2500
+num_to_select = 500
 
 random_dogs = random.sample(dog_files, num_to_select)
 random_cats = random.sample(cat_files, num_to_select)

@@ -8,7 +8,8 @@ class Configuration:
     display_step = 1
     dropout = 0.5
 
-    CHECKPOINT_PATH = './results2/'
+    CHECKPOINT_PATH = './results3/'
+    # TRAIN_FOLDER = './augmented'
     TRAIN_FOLDER = './preprocessed'
     SUBMISSION_FOLDER = './test64'
     VERIFICATION_FOLDER = './verification64'
