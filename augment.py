@@ -3,8 +3,8 @@ from keras.preprocessing.image import ImageDataGenerator, array_to_img, img_to_a
 import sys
 from Utils import Utils
 
-IMAGES_TO_PROCESS = './preprocessed/'
-FOLDER_TO_SAVE = './augmented/'
+IMAGES_TO_PROCESS = './reduced_5000/'
+FOLDER_TO_SAVE = './augmented_5000/'
 
 def main():
 	print "Augmenting images"
@@ -42,7 +42,7 @@ def augment_and_save_image(image_path, datagen):
 	save_prefix = image_path[:-4]
 
 	i = 0
-	for batch in datagen.flow(x, batch_size=1, save_to_dir='augmented', save_prefix=save_prefix, save_format='jpg'):
+	for batch in datagen.flow(x, batch_size=1, save_to_dir=FOLDER_TO_SAVE, save_prefix=save_prefix, save_format='jpg'):
 		i += 1
 		if i > 3:
 			break

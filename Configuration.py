@@ -8,9 +8,12 @@ class Configuration:
     display_step = 1
     dropout = 0.5
 
-    CHECKPOINT_PATH = './results3/'
+    CHECKPOINT_PATH = './result6_augmented5000/'
     # TRAIN_FOLDER = './augmented'
-    TRAIN_FOLDER = './preprocessed'
+    # TRAIN_FOLDER = './preprocessed'
+    # TRAIN_FOLDER = './reduced_10000'
+    # TRAIN_FOLDER = './reduced_5000'
+    TRAIN_FOLDER = './augmented_5000'
     SUBMISSION_FOLDER = './test64'
     VERIFICATION_FOLDER = './verification64'
     RESULT_FILE_PATH = CHECKPOINT_PATH + 'results.dat'
