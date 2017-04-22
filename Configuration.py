@@ -8,15 +8,14 @@ class Configuration:
     display_step = 1
     dropout = 0.5
 
-    CHECKPOINT_PATH = './result6_augmented5000/'
+    CHECKPOINT_PATH = './test_result/'
     # TRAIN_FOLDER = './augmented'
     # TRAIN_FOLDER = './preprocessed'
     # TRAIN_FOLDER = './reduced_10000'
     # TRAIN_FOLDER = './reduced_5000'
-    TRAIN_FOLDER = './augmented_5000'
+    TRAIN_FOLDER = './augmented_10000'
     SUBMISSION_FOLDER = './test64'
     VERIFICATION_FOLDER = './verification64'
-    RESULT_FILE_PATH = CHECKPOINT_PATH + 'results.dat'
 
     LOGGER_NAME = 'main_logger'
 
@@ -36,7 +35,7 @@ class Configuration:
         logger.setLevel(logging.DEBUG)
 
         sh = logging.StreamHandler()
-        fh = logging.FileHandler(Configuration.RESULT_FILE_PATH)
+        fh = logging.FileHandler(Configuration.CHECKPOINT_PATH + 'results.dat')
 
         sh.setLevel(logging.DEBUG)
         fh.setLevel(logging.DEBUG)

@@ -89,8 +89,15 @@ def get_weights_and_biases():
 
 
 def read_command_line():
+	if (len(sys.argv) > 4):
+		checkpoint_path = sys.argv[4]
+		logger().info("Changing CHECKPOINT_PATH to:" + checkpoint_path)
+		Config.CHECKPOINT_PATH = checkpoint_path 
+
 	return int(sys.argv[1]), int(sys.argv[2]), int(sys.argv[3])
 
+def maybe_create_result_directory():
+	Utils.maybe_create_directory(Config.CHECKPOINT_PATH)
 
 def create_submission(session, model, keep_prob, x, data_provider):
 	logger().info("Creating submission")
@@ -213,12 +220,14 @@ def check_arguments_and_maybe_exit():
 
 def main():
 
+	train_flag, eval_flag, submission_flag = read_command_line()
+
 	Config.configure_logger()
 	Config.save_config()
 
 	check_arguments_and_maybe_exit()
 
-	train_flag, eval_flag, submission_flag = read_command_line()
+	maybe_create_result_directory()
 
 	weights, biases = get_weights_and_biases()
 
