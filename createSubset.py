@@ -3,7 +3,9 @@ import random
 import shutil
 
 train_folder = './preprocessed/'
-verification_folder = './reduced_5000/'
+verification_folder = './verification64/'
+
+num_to_select = 500
 
 files = Utils.files_in_path(train_folder)
 
@@ -19,8 +21,6 @@ for imageFilePath in files:
 		dog_files.append(imageFilePath)
 
 i = 0
-
-num_to_select = 2500
 
 random_dogs = random.sample(dog_files, num_to_select)
 random_cats = random.sample(cat_files, num_to_select)
