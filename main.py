@@ -89,10 +89,18 @@ def get_weights_and_biases():
 
 
 def read_command_line():
+	logger().info("Command line arguments:")
+	logger().info(sys.argv)
+
 	if (len(sys.argv) > 4):
 		checkpoint_path = sys.argv[4]
-		logger().info("Changing CHECKPOINT_PATH to:" + checkpoint_path)
+		print "Changing CHECKPOINT_PATH to:" + checkpoint_path
 		Config.CHECKPOINT_PATH = checkpoint_path 
+
+	if (len(sys.argv) > 5):
+		train_folder = sys.argv[5]
+		print "Changing TRAIN_FOLDER to:" + train_folder
+		Config.TRAIN_FOLDER = train_folder 	
 
 	return int(sys.argv[1]), int(sys.argv[2]), int(sys.argv[3])
 
@@ -167,6 +175,7 @@ def train(sess, x, y, optimizer, cost, accuracy, keep_prob, data_provider):
 
 	training_iters = Config.epochs * data_provider.train_images_count
 
+	logger().info("Number of images to train:" + str(data_provider.train_images_count))
 	logger().info(str(training_iters) + " needed to achieve " + str(Config.epochs) + " epochs")
 
 	while step * Config.batch_size < training_iters:
