@@ -13,9 +13,9 @@ class Configuration:
     # TRAIN_FOLDER = './preprocessed'
     # TRAIN_FOLDER = './reduced_10000'
     # TRAIN_FOLDER = './reduced_5000'
-    TRAIN_FOLDER = './augmented_10000'
-    SUBMISSION_FOLDER = './test64'
-    VERIFICATION_FOLDER = './verification64'
+    TRAIN_FOLDER = './data/augmented_10000'
+    SUBMISSION_FOLDER = './data/test64'
+    VERIFICATION_FOLDER = './data/verification64'
 
     LOGGER_NAME = 'main_logger'
 
