@@ -2,8 +2,10 @@ from Utils import Utils
 import tensorflow as tf
 import skimage.io
 import numpy
+from keras.preprocessing.image import ImageDataGenerator, array_to_img, img_to_array, load_img
 from Configuration import Configuration as Config
-
+import matplotlib.pyplot as plt
+import scipy.misc
 
 class DataProvider:
     def __init__(self, train_folder, submission_folder, verification_folder):
@@ -57,7 +59,7 @@ class DataProvider:
         images = list()
 
         for file_path in test_image_files:
-            image = self.load_image(file_path)
+            image = self.load_test_image(file_path)
             images.append(image)
 
         return numpy.array(images), numpy.array(test_labels)
@@ -76,7 +78,7 @@ class DataProvider:
         images = list()
 
         for file_path in train_image_files:
-            image = self.load_image(file_path)
+            image = self.load_train_image(file_path)
             images.append(image)
 
         return numpy.array(images), numpy.array(train_labels)
@@ -116,26 +118,46 @@ class DataProvider:
 
     @staticmethod
     def add_noise(image):
-        # Randomly flip the image horizontally.
-        # distorted_image = tf.image.random_flip_left_right(distorted_image)
+    	
+        datagen = ImageDataGenerator(
+            rotation_range=40,
+            width_shift_range=0.2,
+            height_shift_range=0.2,
+            rescale=1./255,
+            shear_range=0.2,
+            zoom_range=0.2,
+            horizontal_flip=True,
+            fill_mode='nearest'
+        )
 
-        # Because these operations are not commutative, consider randomizing
-        # the order their operation.
-     # 	distorted_image = tf.image.random_brightness(image, max_delta=0.3)
-           
-    	# distorted_image = tf.image.random_contrast(distorted_image, lower=0.2, upper=1.5)
+        x = image.reshape((1,) + image.shape)
 
-     # 	with tf.Session() as sess:
-    	#     image = distorted_image.eval()
+        for batch in datagen.flow(x, batch_size=1):
+            return batch[0]
 
-        return image  
+    @staticmethod        
+    def scale(image):
+        datagen = ImageDataGenerator(
+            rescale=1./255
+        )
+
+        x = image.reshape((1,) + image.shape)
+
+        for batch in datagen.flow(x, batch_size=1):
+            return batch[0]
 
     @staticmethod
-    def load_image(image_file):
+    def load_train_image(image_file):
         image = skimage.io.imread(image_file).astype(numpy.float32)
         image = DataProvider.add_noise(image)
         image = DataProvider.flatten(image)
-        image[:] = [value / 255.0 for value in image]
         return image
+
+    @staticmethod
+    def load_test_image(image_file):
+        image = skimage.io.imread(image_file).astype(numpy.float32)
+        image = DataProvider.scale(image)
+        image = DataProvider.flatten(image)
+        return image    
 
 

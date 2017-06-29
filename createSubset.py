@@ -2,8 +2,10 @@ from Utils import Utils
 import random
 import shutil
 
-train_folder = './preprocessed/'
-verification_folder = './verification64/'
+train_folder = './data/preprocessed_9000/'
+verification_folder = './data/verification_1000//'
+
+#  number of images to select = num_to_select * 2
 
 num_to_select = 500
 
